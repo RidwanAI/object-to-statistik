@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login || Akun</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #222d32;
+        }
+
+        .container {
+            color: #00ff00;
+            max-width: 450px;
+            margin-top: 70px;
+            background-color: rgb(9, 17, 17);
+            border-radius: 10px;
+        }
+
+        input[type='text'],
+        input[type='password'] {
+            background-color: #1a2226;
+            color: white;
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            margin-bottom: 25px;
+        }
+
+        input[type='text']:focus,
+        input[type='password']:focus {
+            outline: none;
+            border: none;
+            background-color: #1a2226;
+            border: 2px solid #00ff00;
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .d-grid button {
+            border-radius: 20px;
+        }
+
+        checkbox {
+            margin-bottom: 10px;
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row text-center mb-3">
+            <div class="col mt-5">
+                <h3>L O G I N</h3>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-11 mb-3">
+                <form action="/login" method="post">
+                    <hr />
+                    {{ if .error }}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ .error }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {{ end }}
+                    <div class="mb-3">
+                        <label>Username</label>
+                        <input type="text" name="username"
+                            class="form-control {{ if .validation.Username }} is-invalid {{ end }}"
+                            autocomplete="off" />
+                        <div class="invalid-feedback">
+                            {{ .validation.Username }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label>Password</label>
+                        <input type="password" name="password" id="myInput"
+                            class="form-control {{ if .validation.Password }} is-invalid {{ end }}"
+                            autocomplete="off" />
+                        <div class="invalid-feedback">
+                            {{ .validation.Password }}
+                        </div>
+                        <div>
+                            <input type="checkbox" onclick="myFunction()" title="Show password here"
+                                class="form-check-input" id="cek">
+                            <label class="form-check-label" for="cek">Show Password</label> <br>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-block">Login</button>
+                    </div>
+                    <hr />
+                    <center>
+                        <p>Belum punya akun? <a href="/register">Mendaftar</a></p>
+                    </center>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myInput");
+            if (x.type === "password") {
+                x.type = "text";
+            }
+            else {
+                x.type = "password";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
