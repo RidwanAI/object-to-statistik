@@ -1,15 +1,21 @@
 package controllers
 
 import (
+	"encoding/json"
 	"errors"
 	"html/template"
+	"io"
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/RidwanAI/object-to-statistik/config"
 	"github.com/RidwanAI/object-to-statistik/entities"
 	"github.com/RidwanAI/object-to-statistik/libraries"
 	"github.com/RidwanAI/object-to-statistik/models"
+	"github.com/extrame/xls"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -52,6 +58,75 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func Statistik(w http.ResponseWriter, r *http.Request) {
+	
+	session, _ := config.Store.Get(r, config.SESSIONS_ID)
+
+	if len(session.Values) == 0 {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	} else {
+
+		if session.Values["loggedIn"] != true {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+		} else {
+			
+			data, err := gudangModel.GetData()
+			if err != nil {
+				log.Println(err)
+				http.Error(w, "Failed to get data", http.StatusInternalServerError)
+				return
+			}
+		
+			tmpl, err := template.ParseFiles("views/visualisasi.html")
+			if err != nil {
+				log.Println(err)
+				http.Error(w, "Failed to load template", http.StatusInternalServerError)
+				return
+			}
+		
+			err = tmpl.Execute(w, data)
+			if err != nil {
+				log.Println(err)
+				http.Error(w, "Failed to render template", http.StatusInternalServerError)
+				return
+			}
+		}
+	}
+
+}
+
+func APIStat(w http.ResponseWriter, r *http.Request) {
+
+	session, _ := config.Store.Get(r, config.SESSIONS_ID)
+
+	if len(session.Values) == 0 {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	} else {
+
+		if session.Values["loggedIn"] != true {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+		} else {
+			
+			data, err := gudangModel.GetData()
+			if err != nil {
+				log.Println(err)
+				http.Error(w, "Failed to get data", http.StatusInternalServerError)
+				return
+			}
+		
+			// Mengirim data sebagai respons JSON
+			w.Header().Set("Content-Type", "application/json")
+			err = json.NewEncoder(w).Encode(data)
+			if err != nil {
+				log.Println(err)
+				http.Error(w, "Failed to encode data", http.StatusInternalServerError)
+				return
+			}
+		}
+	}
+
+}
+
 func Login(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodGet {
@@ -83,12 +158,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 			var message error
 			if user.Username == "" {
-				message = errors.New("Username atau Password salah!")
+				message = errors.New("Username atau Password Salah!")
 			} else {
 				// pengecekan password
 				errPassword := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(UserInput.Password))
 				if errPassword != nil {
-					message = errors.New("Username atau Password salah!")
+					message = errors.New("Username atau Password Salah!")
 				}
 			}
 
@@ -184,7 +259,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 		if session.Values["loggedIn"] != true {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 		} else {
-			
+
 			if r.Method == http.MethodGet {
 				temp, err := template.ParseFiles("views/update.html")
 				if err != nil {
@@ -204,7 +279,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 				gudang.NamaPemasok = r.Form.Get("nama_pemasok")
 				gudang.AlamatPemasok = r.Form.Get("alamat_pemasok")
 		
-				var data = make(map[string]interface{})
+				var data = make(map[string]interface{}) 
 		
 				vErrors := validation.Struct(gudang)
 		
@@ -221,6 +296,128 @@ func Add(w http.ResponseWriter, r *http.Request) {
 			}
 
 		}
+	}
+}
+
+func AddExcel(w http.ResponseWriter, r *http.Request)  {
+	
+	session, _ := config.Store.Get(r, config.SESSIONS_ID)
+
+	if len(session.Values) == 0 {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	} else {
+		
+		if session.Values["loggedIn"] != true {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+		} else {
+
+			if r.Method == http.MethodGet {
+				temp, err := template.ParseFiles("views/excel.html")
+				if err != nil {
+					panic(err)
+				}
+				temp.Execute(w, nil)
+
+			} else if r.Method == http.MethodPost {
+				
+				r.ParseForm()
+
+				err := r.ParseMultipartForm(32 << 20)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+
+				file, handler, err := r.FormFile("file")
+				if err != nil {
+					http.Error(w, "Failed to get file", http.StatusBadRequest)
+					return
+				}
+				defer file.Close()
+
+				// Menyimpan file Excel ke dalam folder temporary
+				tempFile := filepath.Join("assets/temp", handler.Filename)
+				out, err := os.Create(tempFile)
+				if err != nil {
+					http.Error(w, "Failed to create temporary file", http.StatusInternalServerError)
+					return
+				}
+				defer out.Close()
+
+				_, err = io.Copy(out, file)
+				if err != nil {
+					http.Error(w, "Failed to save file", http.StatusInternalServerError)
+					return
+				}
+
+				// Membuka file Excel
+				xlsFile, err := xls.Open(tempFile, "utf-8")
+				if err != nil {
+					http.Error(w, "Failed to open Excel file", http.StatusInternalServerError)
+					return
+				}
+
+				// Membaca sheet pertama dari file Excel
+				sheet := xlsFile.GetSheet(0)
+
+				// Membuka koneksi ke database MySQL
+				db, err := config.DBConn()
+				if err != nil {
+					http.Error(w, "Failed to connect to database", http.StatusInternalServerError)
+					return
+				}
+				defer db.Close()
+
+				// Iterasi baris pada sheet Excel dan mengimpor datanya ke database
+				for i := 1; i <= int(sheet.MaxRow); i++ {
+					row := sheet.Row(i)
+					data := entities.Gudang{
+						NamaProduk: row.Col(1),
+						KodeProduk: row.Col(2),
+						JenisProduk: row.Col(3),
+						TanggalUpdate: row.Col(4),
+						JumlahStok: row.Col(5),
+						NamaPemasok: row.Col(6),
+						AlamatPemasok: row.Col(7),
+					}
+
+					// Mengimpor data ke database
+					_, err = db.Exec("INSERT INTO sistem (nama_produk, kode_produk, jenis_produk, tanggal_update, jumlah_stok, nama_pemasok, alamat_pemasok) VALUES (?, ?, ?, ?, ?, ?, ?)", data.NamaProduk, data.KodeProduk, data.JenisProduk, data.TanggalUpdate, data.JumlahStok, data.NamaPemasok, data.AlamatPemasok)
+					if err != nil {
+						log.Println("Error importing data:", err)
+					}
+				}
+
+				// Menghapus file temporary setelah selesai mengimpor
+				err = os.Remove(tempFile)
+				if err != nil {
+					log.Println("Error deleting temporary file:", err)
+				}
+
+				// Menampilkan pesan berhasil kepada pengguna
+				successData := struct {
+					Message string
+				}{
+					Message: "Data imported successfully!",
+				}
+				renderTemplate(w, "views/excel.html", successData)
+
+			}
+		}
+	}
+}
+
+func renderTemplate(w http.ResponseWriter, templateFile string, data interface{}) {
+	tmpl, err := template.ParseFiles(templateFile)
+	if err != nil {
+		http.Error(w, "Failed to load template", http.StatusInternalServerError)
+		return
+	}
+
+	err = tmpl.Execute(w, data)
+	if err != nil {
+		http.Error(w, "Failed to render template", http.StatusInternalServerError)
+		return
 	}
 }
 

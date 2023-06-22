@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Import Data from Excel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .konten {
+            padding-top: 166px;
+            max-width: 400px;
+            padding-bottom: 166px;
+        }
+
+        .deket {
+            line-height: 0.5;
+        }
+
+        a {
+            color: #ffffff;
+        }
+
+        a:hover {
+            color: chartreuse;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .bi {
+            color: #ffffff;
+        }
+
+        .bi:hover {
+            color: chartreuse;
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow fixed-top" style="background-color: rgb(0, 0, 255);">
+        <div class="container">
+            <h5 class="navbar-brand" style="color: white;">Import Data from Excel</h5>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <strong><a href="/gudang" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="16" height="20" fill="currentColor" class="bi bi-house-door-fill"
+                                    viewBox="0 0 16 20">
+                                    <path
+                                        d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+                                </svg> Home</strong></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Content -->
+    <section class="data">
+        <div class="container konten">
+            <div class="row text-left mb-3">
+                <div class="col">
+                    <h3>Import Data</h3>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                {{ if .Message }}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ .Message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {{end}}
+                <hr>
+                <form action="/gudang/addExcel" method="POST" enctype="multipart/form-data" class="row g-2">
+                    <div class="col-auto mb-3">
+                        <input type="file" name="file" class="form-control">
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary">Import</button>
+                        </div>
+                        <div class="col-auto">
+                            <a href="/gudang" class="btn btn-outline-success">Lihat Data</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-black text-left" style="background-color: rgb(0, 0, 255); padding-bottom: 110px; height: 20px;">
+        <div class="container">
+            <br><br>
+            <p class="deket" style="color: white">You are on the Import Data from Excel Page, back to <b><a
+                        href="/gudang" style="text-decoration: none;">Home</a></b>
+            </p>
+            <p class="deket" style="color: white;">Created by Kelompok 6</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

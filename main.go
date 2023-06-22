@@ -14,8 +14,11 @@ func main() {
 	http.HandleFunc("/gudang", gudangcontroller.Index)
 	http.HandleFunc("/gudang/index", gudangcontroller.Index)
 	http.HandleFunc("/gudang/update", gudangcontroller.Add)
+	http.HandleFunc("/gudang/addExcel", gudangcontroller.AddExcel)
 	http.HandleFunc("/gudang/ubah", gudangcontroller.Edit)
 	http.HandleFunc("/gudang/hapus", gudangcontroller.Delete)
+	http.HandleFunc("/gudang/statistik", gudangcontroller.Statistik)
+	http.HandleFunc("/gudang/statistik/api", gudangcontroller.APIStat)
 
 	http.ListenAndServe(":9000", nil)
 }

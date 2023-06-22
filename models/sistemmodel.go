@@ -24,6 +24,27 @@ func NewGudangModel() *GudangModel {
 	}
 }
 
+func (g *GudangModel) GetData() ([]entities.Gudang, error ) {
+
+	rows, err := g.conn.Query("select id, nama_produk, jumlah_stok from sistem")
+    if err != nil {
+        return []entities.Gudang{}, err
+    }
+    defer rows.Close()
+
+	var visual []entities.Gudang
+    for rows.Next() {
+        var data entities.Gudang 
+        rows.Scan(&data.Id, 
+			&data.NamaProduk, 
+			&data.JumlahStok)
+        visual = append(visual, data)
+    }
+
+    return visual, nil
+
+}
+
 func (g *GudangModel) BacaData() ([]entities.Gudang, error) {
 	rows, err := g.conn.Query("select * from sistem")
 	if err != nil {

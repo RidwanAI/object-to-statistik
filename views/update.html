@@ -1,16 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Stok Barang</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Form Tambah Data Barang || Gudang</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <Style>
-        .container {
+        .konten {
+            padding-top: 6rem;
             max-width: 550px;
+            padding-bottom: 2rem;
+        }
+
+        .deket {
+            line-height: 0.5;
+        }
+
+        a {
+            color: #ffffff;
+        }
+
+        a:hover {
+            color: chartreuse;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .bi {
+            color: #ffffff;
+        }
+
+        .bi:hover {
+            color: chartreuse;
+            transition: all 0.3s ease-in-out;
         }
     </Style>
 
@@ -18,86 +42,138 @@
 
 <body>
 
-    <div class="container mt-5 mb-5">
-        <h3>Tambah Stok Barang</h3>
-        {{ if .pesan }}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ .pesan }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow fixed-top" style="background-color: rgb(0, 0, 255);">
+        <div class="container">
+            <h5 class="navbar-brand" style="color: white;">Form Tambah Data Barang</h5>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <strong><a href="/gudang" style="text-decoration: none;"
+                                onclick="return confirm('Apakah anda yakin ingin keluar dari form tambah data barang dan menghapus semua data yang telah diinputkan?')"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="20" fill="currentColor"
+                                    class="bi bi-house-door-fill" viewBox="0 0 16 20">
+                                    <path
+                                        d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+                                </svg> Home</strong></a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        {{ end }}
-        <hr>
-        <form action="/gudang/update" method="post">
-            <div class="mb-4">
-                <label for="" class="form-label">Nama Produk</label>
-                <input type="text" name="nama_produk"
-                    value="{{ if .gudang.NamaProduk }}{{ .gudang.NamaProduk }}{{ end }}"
-                    class="form-control {{ if .validation.NamaProduk }} is-invalid {{ end }}">
-                <div class="invalid-feedback">
-                    {{ .validation.NamaProduk }}
-                </div>
-            </div>
-            <div class="mb-4">
-                <label for="" class="form-label">Kode Produk</label>
-                <input type="text" value="{{ if .gudang.KodeProduk }}{{ .gudang.KodeProduk }}{{ end }}"
-                    class="form-control {{ if .validation.KodeProduk }} is-invalid {{ end }}" name="kode_produk">
-                <div class="invalid-feedback">
-                    {{ .validation.KodeProduk }}
-                </div>
-            </div>
-            <div class="mb-4">
-                <label for="" class="form-label">Jenis Produk</label>
-                <input type="text" value="{{ if .gudang.JenisProduk }}{{ .gudang.JenisProduk }}{{ end }}"
-                    class="form-control {{ if .validation.JenisProduk }} is-invalid {{ end }}" name="jenis_produk">
-                <div class="invalid-feedback">
-                    {{ .validation.JenisProduk }}
-                </div>
-            </div>
-            <div class="mb-4">
-                <label for="" class="form-label">Tanggal Update Produk</label>
-                <input type="date" value="{{ if .gudang.TanggalUpdate }}{{ .gudang.TanggalUpdate }}{{ end }}"
-                    class="form-control {{ if .validation.TanggalUpdate }} is-invalid {{ end }}" name="tanggal_update">
-                <div class="invalid-feedback">
-                    {{ .validation.TanggalUpdate }}
-                </div>
-            </div>
-            <div class="mb-4">
-                <label for="" class="form-label">Jumlah Stok Produk</label>
-                <input type="text" value="{{ if .gudang.JumlahStok }}{{ .gudang.JumlahStok }}{{ end }}"
-                    class="form-control {{ if .validation.JumlahStok }} is-invalid {{ end }}" name="jumlah_stok">
-                <div class="invalid-feedback">
-                    {{ .validation.JumlahStok }}
-                </div>
-            </div>
-            <div class="mb-4">
-                <label for="" class="form-label">Nama Pemasok Produk</label>
-                <input type="text" value="{{ if .gudang.NamaPemasok }}{{ .gudang.NamaPemasok }}{{ end }}"
-                    class="form-control {{ if .validation.NamaPemasok }} is-invalid {{ end }}" name="nama_pemasok">
-                <div class="invalid-feedback">
-                    {{ .validation.NamaPemasok }}
-                </div>
-            </div>
-            <div class="mb-4">
-                <label for="" class="form-label">Alamat Pemasok Produk</label>
-                <textarea name="alamat_pemasok"
-                    class="form-control {{ if .validation.AlamatPemasok }} is-invalid {{ end }}"
-                    rows="4">{{ if .gudang.AlamatPemasok }}{{ .gudang.AlamatPemasok }}{{ end }}</textarea>
-                <div class="invalid-feedback">
-                    {{ .validation.AlamatPemasok }}
-                </div>
-            </div>
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary d-grid gap-2 col-10 mx-auto">Simpan</button>
-            </div>
-            <div class="mb-4">
-                <a href="/gudang" class="btn btn-outline-success d-grid gap-2 col-10 mx-auto">Lihat Data</a>
-            </div>
-        </form>
-    </div>
+    </nav>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
+
+    <!-- Content -->
+    <section class="data">
+        <div class="container konten">
+            <div class="row text-left mb-3">
+                <div class="col">
+                    <h3>Tambah Barang</h3>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                {{ if .pesan }}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ .pesan }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {{ end }}
+                <hr>
+                <form action="/gudang/update" method="post">
+                    <div class="mb-4">
+                        <label for="" class="form-label">Nama Produk</label>
+                        <input type="text" name="nama_produk"
+                            value="{{ if .gudang.NamaProduk }}{{ .gudang.NamaProduk }}{{ end }}"
+                            class="form-control {{ if .validation.NamaProduk }} is-invalid {{ end }}">
+                        <div class="invalid-feedback">
+                            {{ .validation.NamaProduk }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="" class="form-label">Kode Produk</label>
+                        <input type="text" value="{{ if .gudang.KodeProduk }}{{ .gudang.KodeProduk }}{{ end }}"
+                            class="form-control {{ if .validation.KodeProduk }} is-invalid {{ end }}"
+                            name="kode_produk">
+                        <div class="invalid-feedback">
+                            {{ .validation.KodeProduk }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="" class="form-label">Jenis Produk</label>
+                        <input type="text" value="{{ if .gudang.JenisProduk }}{{ .gudang.JenisProduk }}{{ end }}"
+                            class="form-control {{ if .validation.JenisProduk }} is-invalid {{ end }}"
+                            name="jenis_produk">
+                        <div class="invalid-feedback">
+                            {{ .validation.JenisProduk }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="" class="form-label">Tanggal Update Produk</label>
+                        <input type="date" value="{{ if .gudang.TanggalUpdate }}{{ .gudang.TanggalUpdate }}{{ end }}"
+                            class="form-control {{ if .validation.TanggalUpdate }} is-invalid {{ end }}"
+                            name="tanggal_update">
+                        <div class="invalid-feedback">
+                            {{ .validation.TanggalUpdate }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="" class="form-label">Jumlah Stok Produk</label>
+                        <input type="text" value="{{ if .gudang.JumlahStok }}{{ .gudang.JumlahStok }}{{ end }}"
+                            class="form-control {{ if .validation.JumlahStok }} is-invalid {{ end }}"
+                            name="jumlah_stok">
+                        <div class="invalid-feedback">
+                            {{ .validation.JumlahStok }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="" class="form-label">Nama Pemasok Produk</label>
+                        <input type="text" value="{{ if .gudang.NamaPemasok }}{{ .gudang.NamaPemasok }}{{ end }}"
+                            class="form-control {{ if .validation.NamaPemasok }} is-invalid {{ end }}"
+                            name="nama_pemasok">
+                        <div class="invalid-feedback">
+                            {{ .validation.NamaPemasok }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="" class="form-label">Alamat Pemasok Produk</label>
+                        <textarea name="alamat_pemasok"
+                            class="form-control {{ if .validation.AlamatPemasok }} is-invalid {{ end }}"
+                            rows="4">{{ if .gudang.AlamatPemasok }}{{ .gudang.AlamatPemasok }}{{ end }}</textarea>
+                        <div class="invalid-feedback">
+                            {{ .validation.AlamatPemasok }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary d-grid gap-2 col-10 mx-auto">Simpan</button>
+                    </div>
+                    <div class="mb-4">
+                        <a href="/gudang" class="btn btn-outline-success d-grid gap-2 col-10 mx-auto">Lihat Data</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer class="text-black text-left" style="background-color: rgb(0, 0, 255); padding-bottom: 110px; height: 20px;">
+        <div class="container">
+            <br><br>
+            <p class="deket" style="color: white">You are on the add item data form page, back to <b><a href="/gudang"
+                        style="text-decoration: none;"
+                        onclick="return confirm('Apakah anda yakin ingin keluar dari form tambah data barang dan menghapus semua data yang telah diinputkan?')">Home</a></b>
+            </p>
+            <p class="deket" style="color: white;">Created by Kelompok 6</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 
 </html>

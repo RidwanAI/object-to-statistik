@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Statistik || Gudang</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .konten {
+            padding-top: 6rem;
+            padding-bottom: 2rem;
+        }
+
+        .deket {
+            line-height: 0.5;
+        }
+
+        a {
+            color: #ffffff;
+        }
+
+        a:hover {
+            color: chartreuse;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .bi {
+            color: #ffffff;
+        }
+
+        .bi:hover {
+            color: chartreuse;
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow fixed-top" style="background-color: rgb(0, 0, 255);">
+        <div class="container">
+            <h5 class="navbar-brand" style="color: white;">Statistik Stok Barang</h5>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <strong><a href="/gudang" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="16" height="20" fill="currentColor" class="bi bi-house-door-fill"
+                                    viewBox="0 0 16 20">
+                                    <path
+                                        d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+                                </svg> Home</strong></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <section class="data">
+        <div class="container konten">
+            <div class="row text-left mb-3">
+                <div class="col">
+                    <h3>Statistik</h3>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <canvas id="chart"></canvas>
+
+                <script>
+                    fetch('/gudang/statistik/api')
+                        .then(response => response.json())
+                        .then(data => {
+                            const labels = data.map(item => item.NamaProduk);
+                            const values = data.map(item => item.JumlahStok);
+
+                            const units = "pcs"; // Keterangan yang diinginkan (misalnya "pcs")
+
+                            const ctx = document.getElementById('chart').getContext('2d');
+                            new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: `Statistik Barang dan Stok (${units})`,
+                                        data: values,
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                callback: function (value, index, values) {
+                                                    return value + ` ${units}`; // Menambahkan keterangan pada nilai (misalnya "10 pcs")
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        });
+
+                </script>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="text-black text-left" style="background-color: rgb(0, 0, 255); padding-bottom: 110px; height: 20px;">
+        <div class="container">
+            <br><br>
+            <p class="deket" style="color: white">You are on the item statistics page, back to <b><a href="/gudang"
+                        style="text-decoration: none;">Home</a></b>
+            </p>
+            <p class="deket" style="color: white;">Created by Kelompok 6</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>
