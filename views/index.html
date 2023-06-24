@@ -35,14 +35,20 @@
             line-height: 0.5;
         }
 
-        .utama,
-        .head,
-        .atas,
-        .body,
-        .bawah,
-        .produk,
-        .dp {
+        .atas {
             border: 3px solid black;
+        }
+
+        .dpl {
+            border-left: 3px solid black;
+        }
+
+        .dpr {
+            border-right: 3px solid black;
+        }
+
+        tbody {
+            border-bottom: 3px solid black;
         }
     </style>
 </head>
@@ -92,23 +98,24 @@
                 </div>
             </div>
             <div class="row justify-content-center text-center">
+                <hr>
                 <table class="utama table table-hover table-striped">
-                    <thead class="head table-primary">
+                    <thead class="head table-info">
                         <tr class="atas">
                             <th class="produk">Nama Produk</th>
                             <th class="produk">Kode Produk</th>
                             <th class="produk">Jenis Produk</th>
-                            <th class="produk">Tanggal Update Produk</th>
+                            <th class="produk">Tanggal Updated</th>
                             <th class="produk">Jumlah Stok</th>
                             <th class="produk">Nama Pemasok</th>
-                            <th class="produk">Alamat Pemasok</th>
-                            <th class="produk" colspan="9">Aksi</th>
+                            <th class="produk">Alamat Pemasok <br><br></th>
+                            <th class="produk" colspan="9">Aksi<br><br></th>
                         </tr>
                     </thead>
                     <tbody class="body">
                         {{ range .dGudang }}
                         <tr class="bawah">
-                            <td class="dp">{{ .NamaProduk }}</td>
+                            <td class="dpl">{{ .NamaProduk }}</td>
                             <td class="dp">{{ .KodeProduk }}</td>
                             <td class="dp">{{ .JenisProduk }}</td>
                             <td class="dp">{{ .TanggalUpdate }}</td>
@@ -118,7 +125,7 @@
                             <td class="dp">
                                 <a href="/gudang/ubah?id={{.Id}}" class="btn btn-sm btn-warning">Edit</a>
                             </td>
-                            <td class="dp">
+                            <td class="dpr">
                                 <a href="/gudang/hapus?id={{.Id}}"
                                     onclick="return confirm('Apakah anda yakin ingin menghapus stok?')"
                                     class="btn btn-sm btn-danger">Hapus</a>
