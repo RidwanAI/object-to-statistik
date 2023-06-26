@@ -14,7 +14,7 @@ type GudangModel struct {
 }
 
 func NewGudangModel() *GudangModel {
-	conn, err := config.DBConn()
+	conn, err := config.DBConnect()
 	if err != nil {
 		panic(err)
 	}

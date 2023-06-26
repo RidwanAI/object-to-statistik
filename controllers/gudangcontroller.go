@@ -361,7 +361,7 @@ func AddExcel(w http.ResponseWriter, r *http.Request)  {
 				sheet := xlsFile.GetSheet(0)
 
 				// Membuka koneksi ke database MySQL
-				db, err := config.DBConn()
+				db, err := config.DBConnect()
 				if err != nil {
 					http.Error(w, "Failed to connect to database", http.StatusInternalServerError)
 					return

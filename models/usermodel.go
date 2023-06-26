@@ -12,7 +12,7 @@ type UserModel struct {
 }
 
 func NewUserModel() *UserModel {
-	conn, err := config.DBConn()
+	conn, err := config.DBConnect()
 
 	if err != nil {
 		panic(err)

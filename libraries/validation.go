@@ -18,7 +18,7 @@ type Validation struct {
 }
 
 func NewValidation() *Validation {
-	conn, err := config.DBConn()
+	conn, err := config.DBConnect()
 
 	if err != nil {
 		panic(err)
